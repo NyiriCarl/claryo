@@ -94,6 +94,8 @@ test.describe('Flow B: returning user resumes work', () => {
     await page.getByRole('link', { name: 'Home' }).click();
     await expect(page.getByText('Focus session paused')).toBeVisible();
     await page.getByRole('button', { name: 'Resume' }).first().click();
+    // Wait for Focus Mode before resuming, so the click can't land on Home's button.
+    await expect(page).toHaveURL(/\/focus\//);
     await page.getByRole('button', { name: 'Resume' }).click();
 
     // Time runs out while "in the background": the task is NOT completed automatically.
@@ -283,6 +285,7 @@ test.describe('Accounts, export and deletion', () => {
     // Signing back in brings them back from the account.
     await signIn(page, email);
     await page.getByRole('link', { name: 'Projects' }).click();
-    await expect(page.getByText('Learn Python')).toBeVisible({ timeout: 15_000 });
+    // The project card's title; the same name can also appear as a subtitle elsewhere.
+    await expect(page.locator('h3', { hasText: 'Learn Python' })).toBeVisible({ timeout: 15_000 });
   });
 });
