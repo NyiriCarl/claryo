@@ -94,8 +94,9 @@ test.describe('Flow B: returning user resumes work', () => {
     await page.getByRole('link', { name: 'Home' }).click();
     await expect(page.getByText('Focus session paused')).toBeVisible();
     await page.getByRole('button', { name: 'Resume' }).first().click();
-    // Wait for Focus Mode before resuming, so the click can't land on Home's button.
-    await expect(page).toHaveURL(/\/focus\//);
+    // Wait for Focus Mode to render (the URL changes before the screen does),
+    // so the click can't land on one of Home's Resume buttons.
+    await expect(page.getByRole('timer')).toBeVisible();
     await page.getByRole('button', { name: 'Resume' }).click();
 
     // Time runs out while "in the background": the task is NOT completed automatically.
