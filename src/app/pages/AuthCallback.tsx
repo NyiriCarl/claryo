@@ -12,7 +12,11 @@ export default function AuthCallback() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const urlError = new URLSearchParams(window.location.hash.slice(1) || window.location.search).get('error_description');
+  // Errors arrive in the query (PKCE) or the fragment (implicit flow); with hash
+  // routing the fragment also holds the route, so look in both.
+  const urlError =
+    new URLSearchParams(window.location.search).get('error_description') ??
+    new URLSearchParams(window.location.hash.replace(/^#\/?[^?&]*[?]?/, '')).get('error_description');
 
   useEffect(() => {
     if (status === 'signedIn' && !recovering) navigate('/', { replace: true });

@@ -51,7 +51,10 @@ const friendly = (message: string): string => {
   return message || 'Something went wrong. Please try again.';
 };
 
-const callbackUrl = () => new URL('/auth/callback', window.location.origin).toString();
+const callbackUrl = () =>
+  config.hashRouter
+    ? `${window.location.origin}${window.location.pathname}#/auth/callback`
+    : new URL('/auth/callback', window.location.origin).toString();
 
 // Development-only provider: no password check, token is accepted only by a
 // server running with DEV_AUTH=true. Never enable in production.
