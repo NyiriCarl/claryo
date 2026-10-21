@@ -6,9 +6,10 @@ the app's own copy.
 ## Not verified
 - **Live AI** has only been tested with a simulated Claude client. No real
   API key was available, so plan quality, latency and cost are unmeasured.
-- **The deployed Supabase function** was not redeployed or exercised from
-  this environment. Sign-up emails, the auth callback, password reset and
-  Google sign-in have only been tested with the local test sign-in.
+- **The deployed Supabase function** is live (deployed 21 October 2026 and its
+  code checked against the repository), but it could not be called from the
+  build environment, so sign-up emails, the auth callback, password reset and
+  sync against it still need a check on the live site. Google sign-in is off.
 - **Real devices and Safari.** Tests ran in Chromium with phone-sized,
   touch-enabled viewports. iOS Safari behaviour (home-screen install,
   keyboard, backgrounding) is unverified.

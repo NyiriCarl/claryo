@@ -132,3 +132,17 @@ VITE_LOCAL_DEMO_AI=true VITE_AUTH_PROVIDER=none VITE_HASH_ROUTER=true \
 
 `dist/` then works from any static host or sub-path, because pages use
 `#/path` URLs.
+
+## 8. Live site on GitHub Pages
+
+`.github/workflows/pages.yml` builds the app with hash URLs and publishes it to
+`https://<owner>.github.io/<repo>/` on every push to `main`. It uses the
+Supabase project in `utils/supabase/info.tsx` for sign-in and the API.
+
+One-time setup:
+
+1. GitHub → repository **Settings → Pages → Source: GitHub Actions**.
+2. Supabase → **Authentication → URL Configuration**: set **Site URL** to the
+   Pages address (e.g. `https://nyiricarl.github.io/claryo/`) and add the same
+   address followed by `**` to **Redirect URLs**, so confirmation and
+   password-reset emails link back to the app.

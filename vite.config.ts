@@ -8,21 +8,24 @@ import { brand, logoMarkSvg } from './src/brand.config'
 function brandPlugin(): Plugin {
   const name = process.env.VITE_BRAND_NAME || brand.name
   const shortName = process.env.VITE_BRAND_SHORT_NAME || process.env.VITE_BRAND_NAME || brand.shortName
+  // Public base path ('/' by default, './' for sub-path hosting such as GitHub Pages).
+  let base = '/'
   const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
   const manifest = () =>
     JSON.stringify({
       name,
       short_name: shortName,
       description: brand.description,
-      start_url: '/',
-      scope: '/',
+      // Relative to the manifest, so the app works from any base path.
+      start_url: '.',
+      scope: '.',
       display: 'standalone',
       orientation: 'portrait',
       background_color: '#F8FAFC',
       theme_color: brand.primaryColor,
       icons: [
-        { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-        { src: '/icon-maskable.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
+        { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+        { src: 'icon-maskable.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
       ],
     })
   const files: Record<string, () => string> = {
@@ -36,9 +39,12 @@ function brandPlugin(): Plugin {
   }
   return {
     name: 'brand',
+    configResolved(config) {
+      base = config.base
+    },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const file = req.url?.split('?')[0].slice(1) ?? ''
+        const file = req.url?.split('?')[0].split('/').pop() ?? ''
         if (!files[file]) return next()
         res.setHeader('Content-Type', file.endsWith('.svg') ? 'image/svg+xml' : 'application/manifest+json')
         res.end(files[file]())
@@ -62,8 +68,8 @@ function brandPlugin(): Plugin {
             { tag: 'meta', attrs: { name: 'description', content: brand.description }, injectTo: 'head' },
             { tag: 'meta', attrs: { name: 'theme-color', content: brand.primaryColor }, injectTo: 'head' },
             { tag: 'meta', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' }, injectTo: 'head' },
-            { tag: 'link', attrs: { rel: 'manifest', href: '/manifest.webmanifest' }, injectTo: 'head' },
-            { tag: 'link', attrs: { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }, injectTo: 'head' },
+            { tag: 'link', attrs: { rel: 'manifest', href: `${base}manifest.webmanifest` }, injectTo: 'head' },
+            { tag: 'link', attrs: { rel: 'icon', href: `${base}icon.svg`, type: 'image/svg+xml' }, injectTo: 'head' },
           ],
         }
       },
