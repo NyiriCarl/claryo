@@ -14,6 +14,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@shared/*": [
+        "./supabase/functions/server/shared/*"
       ]
     },
     "allowImportingTsExtensions": true,
@@ -22,7 +25,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": [
-      "node"
+      "node",
+      "vite/client"
     ],
     "strict": true,
     "noFallthroughCasesInSwitch": true
@@ -30,6 +34,6 @@
   "include": [
     "src",
     "vite.config.ts",
-    "vite.figma.config.ts"
+    "supabase/functions/server/shared"
   ]
 }

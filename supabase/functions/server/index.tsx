@@ -1,106 +1,37 @@
-import { Hono } from "npm:hono";
-import { cors } from "npm:hono/cors";
-import { logger } from "npm:hono/logger";
+// Supabase Edge Function entry point (Deno).
+import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 import * as kv from "./kv_store.tsx";
+import { createApp, type AuthUser } from "./app.ts";
+import { providerFromEnv } from "./ai.ts";
 
-const app = new Hono();
+const env = (name: string) => Deno.env.get(name) ?? undefined;
 
-app.use('*', logger(console.log));
-
-app.use(
-  "/*",
-  cors({
-    origin: "*",
-    allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    exposeHeaders: ["Content-Length"],
-    maxAge: 600,
-  }),
-);
-
-// Health check
-app.get("/make-server-b327929d/health", (c) => {
-  return c.json({ status: "ok", ts: new Date().toISOString() });
+const admin = createClient(env("SUPABASE_URL")!, env("SUPABASE_SERVICE_ROLE_KEY")!, {
+  auth: { persistSession: false, autoRefreshToken: false },
 });
 
-// ─── Goals ────────────────────────────────────────────────────────────────────
+const num = (name: string) => (env(name) ? Number(env(name)) : undefined);
 
-app.get("/make-server-b327929d/goals/:deviceId", async (c) => {
-  try {
-    const deviceId = c.req.param("deviceId");
-    const goals = await kv.get(`claryo:goals:${deviceId}`);
-    return c.json({ goals: goals ?? [] });
-  } catch (e) {
-    console.log("Error fetching goals:", e);
-    return c.json({ error: `Failed to fetch goals: ${e}` }, 500);
-  }
-});
-
-app.post("/make-server-b327929d/goals/:deviceId", async (c) => {
-  try {
-    const deviceId = c.req.param("deviceId");
-    const body = await c.req.json();
-    if (!Array.isArray(body.goals)) {
-      return c.json({ error: "goals must be an array" }, 400);
-    }
-    await kv.set(`claryo:goals:${deviceId}`, body.goals);
-    return c.json({ ok: true });
-  } catch (e) {
-    console.log("Error saving goals:", e);
-    return c.json({ error: `Failed to save goals: ${e}` }, 500);
-  }
-});
-
-// ─── Settings ─────────────────────────────────────────────────────────────────
-
-app.get("/make-server-b327929d/settings/:deviceId", async (c) => {
-  try {
-    const deviceId = c.req.param("deviceId");
-    const settings = await kv.get(`claryo:settings:${deviceId}`);
-    return c.json({ settings: settings ?? null });
-  } catch (e) {
-    console.log("Error fetching settings:", e);
-    return c.json({ error: `Failed to fetch settings: ${e}` }, 500);
-  }
-});
-
-app.post("/make-server-b327929d/settings/:deviceId", async (c) => {
-  try {
-    const deviceId = c.req.param("deviceId");
-    const body = await c.req.json();
-    if (!body.settings || typeof body.settings !== "object") {
-      return c.json({ error: "settings must be an object" }, 400);
-    }
-    await kv.set(`claryo:settings:${deviceId}`, body.settings);
-    return c.json({ ok: true });
-  } catch (e) {
-    console.log("Error saving settings:", e);
-    return c.json({ error: `Failed to save settings: ${e}` }, 500);
-  }
-});
-
-// ─── Feedback ─────────────────────────────────────────────────────────────────
-
-app.post("/make-server-b327929d/feedback", async (c) => {
-  try {
-    const body = await c.req.json();
-    const { text, deviceId } = body;
-    if (!text || typeof text !== "string") {
-      return c.json({ error: "text is required" }, 400);
-    }
-    const existing = (await kv.get(`claryo:feedback:${deviceId ?? "anon"}`)) as
-      | { text: string; date: string }[]
-      | null;
-    const updated = [
-      ...(existing ?? []),
-      { text: text.slice(0, 1000), date: new Date().toISOString() },
-    ];
-    await kv.set(`claryo:feedback:${deviceId ?? "anon"}`, updated);
-    return c.json({ ok: true });
-  } catch (e) {
-    console.log("Error saving feedback:", e);
-    return c.json({ error: `Failed to save feedback: ${e}` }, 500);
-  }
+const app = createApp({
+  kv,
+  ai: providerFromEnv(env),
+  async verifyToken(token): Promise<AuthUser | null> {
+    const { data, error } = await admin.auth.getUser(token);
+    if (error || !data.user) return null;
+    return { id: data.user.id, email: data.user.email ?? null };
+  },
+  async deleteAuthUser(id) {
+    const { error } = await admin.auth.admin.deleteUser(id);
+    if (error) throw new Error(error.message);
+  },
+  limits: {
+    guestPlansPerDay: num("LIMIT_GUEST_PLANS_PER_DAY"),
+    userPlansPerDay: num("LIMIT_USER_PLANS_PER_DAY"),
+    guestSimplifyPerDay: num("LIMIT_GUEST_SIMPLIFY_PER_DAY"),
+    userSimplifyPerDay: num("LIMIT_USER_SIMPLIFY_PER_DAY"),
+  },
+  allowedOrigins: env("ALLOWED_ORIGINS") ? env("ALLOWED_ORIGINS")!.split(",").map((s) => s.trim()) : "*",
+  rateLimitSalt: env("RATE_LIMIT_SALT"),
 });
 
 Deno.serve(app.fetch);

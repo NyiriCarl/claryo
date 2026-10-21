@@ -1,29 +1,46 @@
-import { createBrowserRouter } from 'react-router';
-import { Root } from './components/Root';
-import Auth from './pages/Auth';
+import { createBrowserRouter, createHashRouter } from 'react-router';
+import { config } from './config';
+import { AppShell } from './AppShell';
+import Welcome from './pages/Welcome';
+import AuthPage from './pages/Auth';
 import AuthCallback from './pages/AuthCallback';
-import Onboarding from './pages/Onboarding';
 import Home from './pages/Home';
-import ActionScreen from './pages/ActionScreen';
-import ExecutionMode from './pages/ExecutionMode';
-import Projects from './pages/Projects';
-import Momentum from './pages/Momentum';
-import Profile from './pages/Profile';
+import NewProject from './pages/NewProject';
+import ProjectsPage from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
+import TaskDetail from './pages/TaskDetail';
+import TaskHelp from './pages/TaskHelp';
+import TaskComplete from './pages/TaskComplete';
+import Focus from './pages/Focus';
+import ProgressPage from './pages/Progress';
+import SettingsPage from './pages/Settings';
+import { HelpPage, PrivacyPage, TermsPage } from './pages/InfoPages';
+import NotFound from './pages/NotFound';
 
-export const router = createBrowserRouter([
-  { path: '/auth', Component: Auth },
-  { path: '/auth/callback', Component: AuthCallback },
-  { path: '/onboarding', Component: Onboarding },
+// Hash URLs let the app run from a static host with no rewrite rules (e.g. a shared preview link).
+const createRouter = config.hashRouter ? createHashRouter : createBrowserRouter;
+
+export const router = createRouter([
   {
-    path: '/',
-    Component: Root,
+    Component: AppShell,
     children: [
-      { index: true, Component: Home },
-      { path: 'action/:goalId', Component: ActionScreen },
-      { path: 'execute/:goalId', Component: ExecutionMode },
-      { path: 'projects', Component: Projects },
-      { path: 'momentum', Component: Momentum },
-      { path: 'profile', Component: Profile },
+      { path: '/welcome', Component: Welcome },
+      { path: '/auth', Component: AuthPage },
+      { path: '/auth/callback', Component: AuthCallback },
+      { path: '/', Component: Home },
+      { path: '/new', Component: NewProject },
+      { path: '/projects', Component: ProjectsPage },
+      { path: '/projects/:projectId', Component: ProjectDetail },
+      { path: '/projects/:projectId/tasks/:taskId', Component: TaskDetail },
+      { path: '/projects/:projectId/tasks/:taskId/help', Component: TaskHelp },
+      { path: '/projects/:projectId/tasks/:taskId/done', Component: TaskComplete },
+      { path: '/focus/:projectId/:taskId', Component: Focus },
+      { path: '/progress', Component: ProgressPage },
+      { path: '/settings', Component: SettingsPage },
+      { path: '/settings/privacy', Component: PrivacyPage },
+      { path: '/settings/terms', Component: TermsPage },
+      { path: '/settings/help', Component: HelpPage },
+      { path: '*', Component: NotFound },
     ],
   },
 ]);
