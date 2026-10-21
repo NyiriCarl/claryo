@@ -62,13 +62,15 @@ function Switch({ checked, onChange, label, description }: { checked: boolean; o
         {description && <p className="t-meta text-ink-3">{description}</p>}
       </div>
       <button
+        type="button"
         role="switch"
         aria-checked={checked}
         aria-labelledby={id}
         onClick={() => onChange(!checked)}
         className={cx('relative h-8 w-14 shrink-0 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line-strong')}
       >
-        <span className={cx('absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-transform', checked ? 'translate-x-7' : 'translate-x-1')} />
+        {/* left-0 anchors the knob to the track; without it the button centres it and the translate pushes it out. */}
+        <span aria-hidden className={cx('absolute left-0 top-1 h-6 w-6 rounded-full bg-white shadow transition-transform', checked ? 'translate-x-7' : 'translate-x-1')} />
       </button>
     </Row>
   );
