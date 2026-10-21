@@ -67,10 +67,12 @@ function Switch({ checked, onChange, label, description }: { checked: boolean; o
         aria-checked={checked}
         aria-labelledby={id}
         onClick={() => onChange(!checked)}
-        className={cx('relative h-8 w-14 shrink-0 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line-strong')}
+        className="flex h-11 w-14 shrink-0 items-center"
       >
-        {/* left-0 anchors the knob to the track; without it the button centres it and the translate pushes it out. */}
-        <span aria-hidden className={cx('absolute left-0 top-1 h-6 w-6 rounded-full bg-white shadow transition-transform', checked ? 'translate-x-7' : 'translate-x-1')} />
+        {/* The button is a 44px touch target; the visible track sits inside it. left-0 anchors the knob to the track. */}
+        <span aria-hidden data-track className={cx('relative h-8 w-14 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line-strong')}>
+          <span data-knob className={cx('absolute left-0 top-1 h-6 w-6 rounded-full bg-white shadow transition-transform', checked ? 'translate-x-7' : 'translate-x-1')} />
+        </span>
       </button>
     </Row>
   );
@@ -85,7 +87,7 @@ function Segmented<T extends string | number | null>({ value, options, onChange,
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={cx('min-h-10 flex-1 rounded-lg px-2 t-secondary font-medium', value === o.value ? 'bg-surface text-ink shadow-[var(--shadow-card)]' : 'text-ink-2')}
+          className={cx('min-h-11 min-w-11 flex-1 rounded-lg px-1 t-secondary font-medium', value === o.value ? 'bg-surface text-ink shadow-[var(--shadow-card)]' : 'text-ink-2')}
         >
           {o.label}
         </button>
@@ -228,11 +230,11 @@ export default function SettingsPage() {
                 </p>
               </Row>
               {config.authProvider !== 'none' && (
-                <Row className="gap-2 py-3">
-                  <Button size="sm" className="flex-1" onClick={() => navigate('/auth?mode=signup')}>
+                <Row className="flex-wrap gap-2 py-3">
+                  <Button size="sm" className="flex-1 whitespace-nowrap" onClick={() => navigate('/auth?mode=signup')}>
                     Create account
                   </Button>
-                  <Button size="sm" variant="secondary" icon={LogIn} className="flex-1" onClick={() => navigate('/auth?mode=signin')}>
+                  <Button size="sm" variant="secondary" icon={LogIn} className="flex-1 whitespace-nowrap" onClick={() => navigate('/auth?mode=signin')}>
                     Sign in
                   </Button>
                 </Row>

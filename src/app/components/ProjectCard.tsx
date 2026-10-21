@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <Card className="!p-0">
       <div className="flex items-start gap-2 p-4 pb-3">
         <button className="min-w-0 flex-1 text-left" onClick={open}>
-          <h3 className="truncate text-[17px] font-semibold text-ink">{project.title}</h3>
+          <h3 className="line-clamp-2 break-words text-[17px] font-semibold leading-snug text-ink">{project.title}</h3>
           <p className="mt-1 line-clamp-2 t-secondary text-ink-2">
             {project.status === 'completed'
               ? 'Completed'
@@ -58,12 +58,12 @@ export function ProjectCard({ project }: { project: Project }) {
           </div>
         )}
         <div className="flex items-center justify-between gap-2">
-          <span className="flex items-center gap-2 t-meta text-ink-3">
+          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 t-meta text-ink-3">
             Updated {relativeTime(project.lastActivityAt)}
             {project.source === 'demo' && <Badge tone="warn">Demo plan</Badge>}
           </span>
           {project.status !== 'completed' && next && (
-            <Button size="sm" variant="secondary" onClick={open}>
+            <Button size="sm" variant="secondary" className="shrink-0" onClick={open}>
               Resume
             </Button>
           )}

@@ -60,7 +60,7 @@ export default function ProjectsPage() {
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div role="tablist" aria-label="Project status" className="flex gap-1 rounded-2xl bg-surface-2 p-1">
             {TABS.map((t) => (
               <button
@@ -68,7 +68,7 @@ export default function ProjectsPage() {
                 role="tab"
                 aria-selected={tab === t.key}
                 onClick={() => setTab(t.key)}
-                className={cx('min-h-10 rounded-xl px-3 t-secondary font-medium', tab === t.key ? 'bg-surface text-ink shadow-[var(--shadow-card)]' : 'text-ink-2')}
+                className={cx('min-h-11 rounded-xl px-3 t-secondary font-medium', tab === t.key ? 'bg-surface text-ink shadow-[var(--shadow-card)]' : 'text-ink-2')}
               >
                 {t.label}
                 {counts[t.key] > 0 && <span className="ml-1 text-ink-3">{counts[t.key]}</span>}
@@ -84,7 +84,7 @@ export default function ProjectsPage() {
                 id="sort"
                 value={sort}
                 onChange={(e) => setSort(e.target.value as Sort)}
-                className="h-10 rounded-xl border border-line-strong bg-surface px-2 t-meta text-ink"
+                className="h-11 rounded-xl border border-line-strong bg-surface px-2 t-meta text-ink"
               >
                 <option value="recent">Recent</option>
                 <option value="name">Name</option>

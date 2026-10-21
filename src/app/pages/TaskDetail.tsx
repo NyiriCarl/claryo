@@ -77,7 +77,7 @@ export default function TaskDetail() {
                 <CheckCircle2 size={14} aria-hidden /> Done
               </span>
             )}
-            <button onClick={() => setEditing(true)} className="inline-flex min-h-11 items-center gap-1 t-meta font-medium text-brand-text">
+            <button onClick={() => setEditing(true)} className="-mx-2 inline-flex min-h-11 min-w-11 items-center gap-1 px-2 t-meta font-medium text-brand-text">
               <Pencil size={14} aria-hidden /> Edit
             </button>
           </div>
@@ -170,16 +170,16 @@ export default function TaskDetail() {
               Need help with this?
             </h2>
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="secondary" size="sm" icon={Scissors} onClick={() => help('breakdown')}>
+              <Button variant="secondary" size="sm" icon={Scissors} className="!justify-start !px-3 !text-left" onClick={() => help('breakdown')}>
                 Break this down
               </Button>
-              <Button variant="secondary" size="sm" icon={BookOpen} onClick={() => help('explain')}>
+              <Button variant="secondary" size="sm" icon={BookOpen} className="!justify-start !px-3 !text-left" onClick={() => help('explain')}>
                 Explain simply
               </Button>
-              <Button variant="secondary" size="sm" icon={Lightbulb} onClick={() => help('example')}>
+              <Button variant="secondary" size="sm" icon={Lightbulb} className="!justify-start !px-3 !text-left" onClick={() => help('example')}>
                 Show an example
               </Button>
-              <Button variant="secondary" size="sm" icon={HelpCircle} onClick={() => setMoreHelp(true)}>
+              <Button variant="secondary" size="sm" icon={HelpCircle} className="!justify-start !px-3 !text-left" onClick={() => setMoreHelp(true)}>
                 More options
               </Button>
             </div>

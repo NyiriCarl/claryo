@@ -191,7 +191,7 @@ function ClarifyForm({
       <p className="t-meta font-semibold uppercase tracking-wide text-ink-3">Your goal</p>
       <div className="mt-1 flex items-start justify-between gap-2">
         <p className="t-body text-ink">“{goal}”</p>
-        <button type="button" onClick={onEdit} className="min-h-11 shrink-0 t-secondary font-medium text-brand-text">
+        <button type="button" onClick={onEdit} className="-mr-2 min-h-11 min-w-11 shrink-0 px-2 t-secondary font-medium text-brand-text">
           Edit
         </button>
       </div>
