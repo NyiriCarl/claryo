@@ -47,3 +47,23 @@ test('no horizontal scrolling on the main screens', async ({ page }) => {
     expect(overflow, path).toBeLessThanOrEqual(0);
   }
 });
+
+test('settings switches keep the knob inside the track, on the left when off and the right when on', async ({ page }) => {
+  await startAsGuest(page);
+  await page.goto('/settings');
+  const knobs = () =>
+    page.getByRole('switch').evaluateAll((els) =>
+      els.map((e) => {
+        const t = e.getBoundingClientRect();
+        const k = e.firstElementChild!.getBoundingClientRect();
+        return { on: e.getAttribute('aria-checked') === 'true', inside: k.left >= t.left && k.right <= t.right, leftHalf: k.left + k.width / 2 < t.left + t.width / 2 };
+      }),
+    );
+  const sw = page.getByRole('switch', { name: 'Reduce motion' });
+  await expect(sw).toHaveAttribute('aria-checked', 'false');
+  for (const k of await knobs()) expect(k).toEqual({ on: k.on, inside: true, leftHalf: !k.on });
+  await sw.click();
+  await expect(sw).toHaveAttribute('aria-checked', 'true');
+  await page.waitForTimeout(300); // let the slide transition finish
+  for (const k of await knobs()) expect(k).toEqual({ on: k.on, inside: true, leftHalf: !k.on });
+});
