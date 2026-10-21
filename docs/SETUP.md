@@ -119,3 +119,16 @@ npm run test:e2e    # Flows A–E at 390px and 360px, plus accessibility checks
 `test:e2e` starts its own API (port 8799, demo AI, test sign-in) and web
 server (port 5199). Set `DENO_BIN` if `deno` is not on your PATH, and
 `PW_CHROMIUM_PATH` to use an existing Chromium instead of `npx playwright install chromium`.
+
+## 7. Demo-only preview build
+
+For a shareable preview with no server (template plans, guest mode, data in
+the browser only):
+
+```bash
+VITE_LOCAL_DEMO_AI=true VITE_AUTH_PROVIDER=none VITE_HASH_ROUTER=true \
+  npx vite build --config vite.figma.config.ts --base ./
+```
+
+`dist/` then works from any static host or sub-path, because pages use
+`#/path` URLs.

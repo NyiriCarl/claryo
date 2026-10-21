@@ -18,4 +18,6 @@ export const config = {
   googleSignIn: e.VITE_GOOGLE_SIGN_IN === 'true',
   /** Run the demo planner in the browser instead of calling the API (static prototype hosting). */
   localDemoAI: e.VITE_LOCAL_DEMO_AI === 'true',
+  /** Use #/path URLs (static hosting without rewrite rules). */
+  hashRouter: e.VITE_HASH_ROUTER === 'true',
 };

@@ -167,7 +167,8 @@ export default function SettingsPage() {
       if (signedIn) await session.signOut();
       setConfirmDelete(false);
       toast(signedIn ? 'Your account and data were deleted' : 'All data on this device was deleted');
-      window.location.assign('/welcome');
+      window.location.assign(config.hashRouter ? '#/welcome' : '/welcome');
+      if (config.hashRouter) window.location.reload();
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Couldn't delete your account. Please try again.");
     } finally {

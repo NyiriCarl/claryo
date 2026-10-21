@@ -1,4 +1,5 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, createHashRouter } from 'react-router';
+import { config } from './config';
 import { AppShell } from './AppShell';
 import Welcome from './pages/Welcome';
 import AuthPage from './pages/Auth';
@@ -16,7 +17,10 @@ import SettingsPage from './pages/Settings';
 import { HelpPage, PrivacyPage, TermsPage } from './pages/InfoPages';
 import NotFound from './pages/NotFound';
 
-export const router = createBrowserRouter([
+// Hash URLs let the app run from a static host with no rewrite rules (e.g. a shared preview link).
+const createRouter = config.hashRouter ? createHashRouter : createBrowserRouter;
+
+export const router = createRouter([
   {
     Component: AppShell,
     children: [
