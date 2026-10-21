@@ -1,0 +1,10 @@
+{
+  "description": "Create and customize professional visual identities with a cohesive color system and modern typography for brands seeking trust and progress.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
