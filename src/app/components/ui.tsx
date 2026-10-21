@@ -39,15 +39,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cx(
-        'inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition-colors select-none disabled:cursor-not-allowed',
-        size === 'md' ? 'h-[52px] px-5 text-[16px]' : 'h-11 px-4 text-[15px]',
+        'inline-flex items-center justify-center gap-2 rounded-2xl text-center font-semibold leading-tight transition-colors select-none disabled:cursor-not-allowed',
+        size === 'md' ? 'min-h-[52px] px-5 py-2 text-[16px]' : 'min-h-11 px-4 py-1.5 text-[15px]',
         block && 'w-full',
         variants[variant],
         className,
       )}
       {...rest}
     >
-      {loading ? <Loader2 size={18} className="spin" aria-hidden /> : Icon ? <Icon size={18} aria-hidden /> : null}
+      {loading ? <Loader2 size={18} className="spin shrink-0" aria-hidden /> : Icon ? <Icon size={18} className="shrink-0" aria-hidden /> : null}
       {children}
     </button>
   );
@@ -63,7 +63,7 @@ export const IconButton = forwardRef<HTMLButtonElement, { icon: LucideIcon; labe
       type="button"
       aria-label={label}
       title={label}
-      className={cx('inline-flex h-11 w-11 items-center justify-center rounded-xl text-ink-2 hover:bg-surface-2', className)}
+      className={cx('inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-ink-2 hover:bg-surface-2', className)}
       {...rest}
     >
       <Icon size={20} aria-hidden />
@@ -224,7 +224,7 @@ export function Badge({ children, tone = 'neutral' }: { children: ReactNode; ton
     go: 'bg-go-soft text-go-strong',
     brand: 'bg-brand-soft text-brand-text',
   };
-  return <span className={cx('inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold', tones[tone])}>{children}</span>;
+  return <span className={cx('inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[12px] font-semibold', tones[tone])}>{children}</span>;
 }
 
 /** Task checkbox: state is shown by a tick and strike-through, not colour alone. */

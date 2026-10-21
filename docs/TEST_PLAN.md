@@ -7,7 +7,7 @@ Last run: 21 October 2026, on the code in this folder.
 | App type check | `tsc --noEmit -p .` | Pass |
 | Server type check | `deno check` on `app.ts`, `ai.ts`, `server/dev.ts` | Pass |
 | Unit tests | `npm test` | **52 / 52 pass** |
-| End-to-end + accessibility | `npm run test:e2e` | **32 / 32 pass** (16 tests × 2 screen sizes) |
+| End-to-end + accessibility | `npm run test:e2e` | **36 / 36 pass** (18 tests × 2 screen sizes) |
 | Production build | `vite build` | Pass (one bundle-size warning, see limitations) |
 
 End-to-end tests run the real web app in Chromium against the local API with
@@ -59,6 +59,15 @@ Safari; see [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md).
   Focus, task complete, Projects, Progress, Settings and sign-up, in **light and dark** themes.
 - Bottom navigation and task-row touch targets are **at least 44px**.
 - **No horizontal scrolling** on the main screens.
+- Settings switches keep the knob inside the track.
+
+## Small screens (tests/e2e/layout.spec.ts)
+- At **320px** wide with a long project title: no sideways scrolling, every
+  button's text fits inside the button, and every button, tab, switch and
+  menu is at least 44px on both sides. Covers Home, Projects (with sorting),
+  Progress, Settings, project, task, Focus and task complete.
+- A one-off visual review was also done at 320, 360, 390 and 430px in light
+  and dark mode.
 
 ## Unit tests (tests/unit)
 - **plan.test.ts (9):** AI output validation: required fields, clarification

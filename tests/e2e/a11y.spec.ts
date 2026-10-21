@@ -54,8 +54,8 @@ test('settings switches keep the knob inside the track, on the left when off and
   const knobs = () =>
     page.getByRole('switch').evaluateAll((els) =>
       els.map((e) => {
-        const t = e.getBoundingClientRect();
-        const k = e.firstElementChild!.getBoundingClientRect();
+        const t = e.querySelector('[data-track]')!.getBoundingClientRect();
+        const k = e.querySelector('[data-knob]')!.getBoundingClientRect();
         return { on: e.getAttribute('aria-checked') === 'true', inside: k.left >= t.left && k.right <= t.right, leftHalf: k.left + k.width / 2 < t.left + t.width / 2 };
       }),
     );

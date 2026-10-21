@@ -85,7 +85,7 @@ export default function Home() {
               <Timer size={22} className="shrink-0 text-brand-text" aria-hidden />
               <div className="min-w-0 flex-1">
                 <p className="t-meta font-semibold text-brand-text">{focus.state === 'running' ? 'Focus session running' : 'Focus session paused'}</p>
-                <p className="truncate t-body font-medium text-ink">{focusTask.title}</p>
+                <p className="line-clamp-2 t-body font-medium text-ink">{focusTask.title}</p>
               </div>
               <Button size="sm" onClick={() => navigate(`/focus/${focus.projectId}/${focus.taskId}`)}>
                 Resume

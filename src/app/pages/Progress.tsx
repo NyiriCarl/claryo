@@ -92,16 +92,16 @@ export default function ProgressPage() {
               <div className="mt-3">
                 <ProgressBar value={totals.percent} label="Overall progress" tone={totals.percent === 100 ? 'go' : 'brand'} />
               </div>
-              <dl className="mt-4 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-xl bg-surface-2 p-3">
+              <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
+                <div className="min-w-0 rounded-xl bg-surface-2 px-1.5 py-3">
                   <dt className="t-meta text-ink-2">Done</dt>
                   <dd className="t-section text-ink">{totals.done}</dd>
                 </div>
-                <div className="rounded-xl bg-surface-2 p-3">
+                <div className="min-w-0 rounded-xl bg-surface-2 px-1.5 py-3">
                   <dt className="t-meta text-ink-2">Remaining</dt>
                   <dd className="t-section text-ink">{totals.total - totals.done}</dd>
                 </div>
-                <div className="rounded-xl bg-surface-2 p-3">
+                <div className="min-w-0 rounded-xl bg-surface-2 px-1.5 py-3">
                   <dt className="t-meta text-ink-2">Phases done</dt>
                   <dd className="t-section text-ink">
                     {totals.phasesDone}
@@ -138,9 +138,9 @@ export default function ProgressPage() {
               {projects.map((p) => {
                 const pr = progressOf(p);
                 return (
-                  <Link key={p.id} to={`/projects/${p.id}`} className="block">
+                  <Link key={p.id} to={`/projects/${p.id}`} className="block py-1.5">
                     <div className="mb-1.5 flex items-baseline justify-between gap-2">
-                      <span className="truncate t-secondary font-medium text-ink">{p.title}</span>
+                      <span className="line-clamp-2 min-w-0 t-secondary font-medium text-ink">{p.title}</span>
                       <span className="shrink-0 t-meta text-ink-3">{pr.total ? `${pr.done}/${pr.total}` : 'No tasks'}</span>
                     </div>
                     {pr.percent !== null && <ProgressBar value={pr.percent} label={`${p.title} progress`} tone={pr.percent === 100 ? 'go' : 'brand'} />}
